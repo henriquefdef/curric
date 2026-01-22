@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículo Profissional - Waldyr Henrique Dias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cv-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cv-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cv-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .photo-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .title {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .download-btn, .portfolio-btn {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 2;
+            margin: 0 5px;
+        }
+
+        .portfolio-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .download-btn:hover, .portfolio-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .cv-content {
+            padding: 50px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            border-radius: 2px;
+        }
+
+        .skill-category {
+            margin-bottom: 30px;
+        }
+
+        .skill-category h4 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .skill-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2c3e50;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .skill-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .education-item, .experience-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #2c3e50;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .education-item h4, .experience-item h4 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .education-item .institution, .experience-item .company {
+            color: #34495e;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .education-item .date, .experience-item .period {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .experience-item .description {
+            color: #333;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .highlight, .rpa-highlight {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        .rpa-highlight {
+            font-size: 1.1em;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .contact-item {
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .specialty-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ecf0f1, #d5dbdb);
+            color: #2c3e50;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .cv-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px 20px;
+            }
+            
+            .cv-header {
+                padding: 24px 20px;
+            }
+            
+            .name {
+                font-size: 1.8em;
+            }
+
+            .photo-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .specialty-badge {
+                font-size: 0.85em;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+
+            .cv-content {
+                padding: 40px 30px;
+                gap: 40px;
+            }
+
+            .cv-header {
+                padding: 28px;
+            }
+
+            .name {
+                font-size: 1.9em;
+            }
+
+            .photo-container {
+                width: 130px;
+                height: 130px;
+            }
+
+            .section-title {
+                font-size: 1.6em;
+            }
+
+            .skill-item, .education-item, .experience-item {
+                padding: 20px;
+            }
+
+            .download-btn, .portfolio-btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+        }
+
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .container {
+                max-width: 1100px;
+            }
+
+            .cv-content {
+                padding: 45px 35px;
+                gap: 45px;
+            }
+
+            .section-title {
+                font-size: 1.7em;
+            }
+        }
+
+        @media (min-width: 1367px) {
+            .container {
+                max-width: 1200px;
+            }
+
+            .cv-content {
+                padding: 50px 40px;
+                gap: 50px;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(44, 62, 80, 0.05);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="top: 20%; left: 80%; animation-delay: 1s;"></div>
+        <div class="floating-element" style="top: 60%; left: 15%; animation-delay: 2s;"></div>
+        <div class="floating-element" style="top: 80%; left: 70%; animation-delay: 3s;"></div>
+        <div class="floating-element" style="top: 40%; left: 90%; animation-delay: 4s;"></div>
+    </div>
+
+    <div class="container">
+        <div class="cv-card">
+            <div class="cv-header">
+                <div class="photo-container">
+                    <img src="foto.png" alt="Waldyr Henrique Dias" onerror="this.style.display='none'; this.parentNode.innerHTML='Foto não encontrada';">
+                </div>
+                <h1 class="name">Waldyr Henrique Dias</h1>
+                <p class="title">Especialista em Automação e Business Intelligence</p>
+                <button class="download-btn" onclick="downloadPDF()">
+                    📄 DOWNLOAD PDF
+                </button>
+                <button class="portfolio-btn" onclick="openPortfolio()">
+                    🎯 VER PORTFÓLIO
+                </button>
+            </div>
+
+            <div class="cv-content">
+                <div class="left-column">
+                    <div class="contact-info">
+                        <h3>📞 Contato</h3>
+                        <div class="contact-item">📧 henriquediasmg@gmail.com</div>
+                        <div class="contact-item">📱 (34) 99661-2499</div>
+                        <div class="contact-item">📍 Uberlândia, MG</div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">🎓 Formação</h2>
+                        <div class="education-item">
+                            <h4>Graduação em Ciências Contábeis</h4>
+                            <div class="institution">Universidade de Uberaba (UNIUBE)</div>
+                            <div class="date">Concluído</div>
+                        </div>
+                        <div class="education-item">
+                            <h4>MBA em Business Intelligence e Analytics</h4>
+                            <div class="institution">Em andamento</div>
+                            <div class="date">Previsão de conclusão: 06/2026</div>
+                        </div>
+                    </div>
+
+                   <div class="section">
+                        <h2 class="section-title">🏆 Habilidades</h2>
+                        <div class="specialty-badge">SAP</div>
+                        <div class="specialty-badge">Banco de Dados HANA</div>
+                        <div class="specialty-badge">Dashboards Avançados</div>
+                        <div class="specialty-badge">Programação Full Stack</div>
+                        <div class="specialty-badge">Desenvolvimento RPA</div>
+                        <div class="specialty-badge">Automação de Processos</div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">💼 Experiência Profissional</h2>
+                        <div class="experience-item">
+                            <h4>Analista Contábil</h4>
+                            <div class="company">CEMIL - Cooperativa Central Mineira de Laticínios</div>
+                            <div class="period">6 anos</div>
+                            <div class="description">Gestão contábil completa, demonstrações financeiras e análises gerenciais</div>
+                        </div>
+                        <div class="experience-item">
+                            <h4>Analista Fiscal | Analista de Ativos</h4>
+                            <div class="company">Algar Telecom</div>
+                            <div class="period">4 anos (3 anos fiscal + 1 ano ativos)</div>
+                            <div class="description">Análises fiscais, compliance tributário, gestão patrimonial e análise de investimentos</div>
+                        </div>
+                        <div class="experience-item">
+                            <h4>Empreendedor</h4>
+                            <div class="company">Ramo de Varejo</div>
+                            <div class="period">4 anos</div>
+                            <div class="description">Gestão empresarial, vendas e operações comerciais</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="section">
+                        <h2 class="section-title">💻 Competências Técnicas</h2>
+                        
+                        <div class="skill-category">
+                            <h4>🔧 Automação e RPA</h4>
+                            <div class="skill-item">Alta Capacidade de Criação de Robôs e Automações RPA</div>
+                            <div class="skill-item">Scripting Avançado para Automação</div>
+                            <div class="skill-item">Desenvolvimento de Processos Automatizados</div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h4>📊 SAP e Banco de Dados</h4>
+                            <div class="skill-item">Scripting e Automação SAP</div>
+                            <div class="skill-item">Manipulação de Banco de Dados HANA</div>
+                            <div class="skill-item">Integração de Sistemas SAP</div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h4>📈 Business Intelligence</h4>
+                            <div class="skill-item">Dashboards Avançados (JavaScript, Power Bi, Gaio)</div>
+                            <div class="skill-item">Análise de Dados Complexos</div>
+                            <div class="skill-item">Relatórios Gerenciais</div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h4>🖥️ Microsoft Office</h4>
+                            <div class="skill-item">Excel Avançado com VBA</div>
+                            <div class="skill-item">Macros e Automações Excel</div>
+                            <div class="skill-item">Modelagem de Dados</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">🎯 Diferenciais</h2>
+                        <div class="skill-item">
+                            <strong>Expertise em Automação:</strong> Desenvolvimento de soluções RPA que otimizam processos empresariais
+                        </div>
+                        <div class="skill-item">
+                            <strong>SAP Specialist:</strong> Profundo conhecimento em automação e scripting SAP
+                        </div>
+                        <div class="skill-item">
+                            <strong>Data Analytics:</strong> Criação de dashboards avançados para tomada de decisão
+                        </div>
+                        <div class="skill-item">
+                            <strong>Formação Sólida:</strong> Base contábil complementada por diversos cursos na área de tecnologia.
+                        </div>
+                        <div class="skill-item">
+                            <strong>Lógica:</strong> Capacidade de converter rapidamente o conhecimento em ação, criando soluções práticas para resolver problemas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Função para abrir portfólio (abre em nova página)
+        function openPortfolio() {
+            window.open('modal.html', '_blank');
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const card = document.querySelector('.cv-card');
+            const content = document.querySelector('.cv-content');
+            
+            function findSectionByTitle(titleText) {
+                const titles = document.querySelectorAll('.section-title');
+                for (const title of titles) {
+                    if (title.textContent.trim().includes(titleText)) {
+                        return title.parentElement;
+                    }
+                }
+                return null;
+            }
+
+            const experienceSection = findSectionByTitle('Experiência Profissional');
+            const differentiatorsSection = findSectionByTitle('Diferenciais');
+            
+            const floatingElements = document.querySelector('.floating-elements');
+            const buttons = document.querySelectorAll('.download-btn, .portfolio-btn');
+            if (floatingElements) floatingElements.style.display = 'none';
+            buttons.forEach(btn => btn.style.display = 'none');
+            
+            let page2Container;
+            const expParent = experienceSection.parentNode;
+            const expNextSibling = experienceSection.nextSibling;
+            const diffParent = differentiatorsSection.parentNode;
+            const diffNextSibling = differentiatorsSection.nextSibling;
+
+            try {
+                page2Container = document.createElement('div');
+                page2Container.style.width = card.offsetWidth + 'px';
+                page2Container.style.padding = getComputedStyle(content).padding;
+                page2Container.style.backgroundColor = 'white';
+                page2Container.style.position = 'absolute';
+                page2Container.style.left = '-9999px';
+                
+                const gridWrapper = document.createElement('div');
+                gridWrapper.style.display = 'grid';
+                gridWrapper.style.gridTemplateColumns = getComputedStyle(content).gridTemplateColumns;
+                gridWrapper.style.gap = getComputedStyle(content).gap;
+
+                page2Container.appendChild(gridWrapper);
+                document.body.appendChild(page2Container);
+
+                gridWrapper.appendChild(experienceSection);
+                gridWrapper.appendChild(differentiatorsSection);
+
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = 210;
+                const options = { scale: 2, useCORS: true, backgroundColor: '#ffffff' };
+
+                const canvas1 = await html2canvas(card, options);
+                const imgData1 = canvas1.toDataURL('image/png', 1.0);
+                const imgHeight1 = (canvas1.height * pdfWidth) / canvas1.width;
+                pdf.addImage(imgData1, 'PNG', 0, 0, pdfWidth, imgHeight1);
+                
+                pdf.addPage();
+                const canvas2 = await html2canvas(page2Container, options);
+                const imgData2 = canvas2.toDataURL('image/png', 1.0);
+                const imgHeight2 = (canvas2.height * pdfWidth) / canvas2.width;
+                pdf.addImage(imgData2, 'PNG', 0, 0, pdfWidth, imgHeight2);
+
+                pdf.save('Curriculo-Waldyr-Henrique-Dias.pdf');
+
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
+            } finally {
+                expParent.insertBefore(experienceSection, expNextSibling);
+                diffParent.insertBefore(differentiatorsSection, diffNextSibling);
+                
+                if (page2Container && document.body.contains(page2Container)) {
+                    document.body.removeChild(page2Container);
+                }
+
+                if (floatingElements) floatingElements.style.display = 'block';
+                buttons.forEach(btn => btn.style.display = 'inline-block');
+            }
+        }
+
+        window.addEventListener('load', function() {
+            document.querySelector('.cv-card').style.opacity = '0';
+            document.querySelector('.cv-card').style.transform = 'translateY(50px)';
+            
+            setTimeout(function() {
+                document.querySelector('.cv-card').style.transition = 'all 1s ease';
+                document.querySelector('.cv-card').style.opacity = '1';
+                document.querySelector('.cv-card').style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        document.querySelectorAll('.skill-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px) scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

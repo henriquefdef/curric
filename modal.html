@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio - Waldyr Henrique Dias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .portfolio-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .portfolio-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .portfolio-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+            transform: scale(1.1);
+        }
+
+        .portfolio-body {
+            padding: 40px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .project-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+
+        .project-title {
+            color: #2c3e50;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .project-tech {
+            display: inline-block;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 5px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .view-images-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .view-images-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: none;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .modal-content img.zoomed {
+            cursor: grab;
+            max-width: none;
+            max-height: none;
+            position: relative;
+        }
+
+        .modal-content img.zoomed.dragging {
+            cursor: grabbing;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+            transform: scale(1.2);
+        }
+
+        .modal-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            font-size: 35px;
+            font-weight: bold;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            z-index: 3000;
+        }
+
+        .modal-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-prev {
+            left: 10px;
+        }
+
+        .modal-next {
+            right: 10px;
+        }
+
+        .image-wrapper {
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .image-wrapper::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        .image-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .image-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+        }
+
+        .image-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .iframe-modal {
+            display: none;
+            position: fixed;
+            z-index: 2500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .iframe-modal.active {
+            display: flex;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 95%;
+            height: 95%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .iframe-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .iframe-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .iframe-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .iframe-close:hover {
+            color: #e74c3c;
+            transform: scale(1.2);
+        }
+
+        .iframe-content {
+            width: 100%;
+            height: calc(100% - 60px);
+            border: none;
+        }
+
+        .site-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            margin-left: 10px;
+        }
+
+        .site-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .zoom-level {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .zoom-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .image-counter {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .project-description {
+            color: #555;
+            line-height: 1.8;
+            margin: 20px 0;
+            font-size: 1.05em;
+        }
+
+        .project-results {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .project-results h4 {
+            color: #27ae60;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .project-results p {
+            color: #2d5a41;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .portfolio-header {
+                padding: 20px;
+            }
+
+            .portfolio-header h1 {
+                font-size: 2em;
+            }
+
+            .portfolio-body {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .portfolio-container {
+                max-width: 95%;
+            }
+
+            .portfolio-body {
+                padding: 30px;
+            }
+
+            .project-item {
+                padding: 25px;
+            }
+
+            .project-title {
+                font-size: 1.5em;
+            }
+
+            .modal-nav {
+                font-size: 30px;
+                padding: 12px 18px;
+            }
+        }
+
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .portfolio-container {
+                max-width: 1100px;
+            }
+
+            .portfolio-body {
+                padding: 35px;
+            }
+
+            .project-item {
+                padding: 28px;
+            }
+        }
+
+        @media (min-width: 1367px) {
+            .portfolio-container {
+                max-width: 1200px;
+            }
+
+            .portfolio-body {
+                padding: 40px;
+            }
+        }
+
+        /* Responsividade do modal de imagens */
+        @media (max-width: 768px) {
+            .image-wrapper {
+                max-width: 95vw;
+                max-height: 80vh;
+            }
+
+            .modal-nav {
+                font-size: 25px;
+                padding: 10px 15px;
+            }
+
+            .zoom-controls {
+                bottom: 10px;
+                padding: 8px 15px;
+            }
+
+            .zoom-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+
+            .image-counter {
+                top: 10px;
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .image-wrapper {
+                max-width: 92vw;
+                max-height: 85vh;
+            }
+
+            .modal-nav {
+                font-size: 32px;
+            }
+
+            .iframe-container {
+                width: 93%;
+                height: 93%;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .image-wrapper {
+                max-width: 90vw;
+                max-height: 90vh;
+            }
+
+            .iframe-container {
+                width: 95%;
+                height: 95%;
+            }
+        }
+
+        /* Animação de entrada */
+        .project-item {
+            opacity: 0;
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        .project-item:nth-child(1) { animation-delay: 0.1s; }
+        .project-item:nth-child(2) { animation-delay: 0.2s; }
+        .project-item:nth-child(3) { animation-delay: 0.3s; }
+        .project-item:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portfolio-container">
+        <div class="portfolio-header">
+            <button class="close-btn" onclick="window.close()">&times;</button>
+            <h1>🎯 Portfólio de Projetos</h1>
+            <p>Conheça alguns dos meus principais trabalhos em automação e Business Intelligence</p>
+        </div>
+
+        <div class="portfolio-body">
+            
+            <div class="project-item">
+                <div class="project-title">🤖 Sistema RPA SAP - Automação de Processos Contábeis</div>
+                <div class="project-tech">RPA</div>
+                <div class="project-tech">Python</div>
+                <div class="project-tech">SAP</div>
+                <div class="project-tech">VBA</div>
+                
+                <div class="project-description">
+                    Desenvolvi um robô completo que automatiza todo o fluxo de processos contábeis, desde a extração de dados do SAP até a geração de relatórios finais. O sistema processa lançamentos, realiza validações automáticas e identifica inconsistências sem intervenção humana.
+                </div>
+                
+                <button class="view-images-btn" onclick="openImageModal(['img1.png'])">📷 Ver Imagem do Projeto</button>
+                
+                <div class="project-results">
+                    <h4>🎯 Resultados Alcançados:</h4>
+                    <p>• Automação de 95% dos processos manuais<br>
+                    • Eliminação de 100% dos erros de digitação<br>
+                    • Processamento de 10.000+ lançamentos por dia</p>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-title">📊 Dashboard Executivo com Sheets.js</div>
+                <div class="project-tech">Sheets.js</div>
+                <div class="project-tech">JavaScript</div>
+                <div class="project-tech">HTML5</div>
+                <div class="project-tech">Charts.js</div>
+                
+                <div class="project-description">
+                    Criei dashboards executivos personalizados para envio por email aos diretores, solucionando a dificuldade de interpretação correta dos dados através de apresentações complexas, excesso de filtros e poluição visual. Dessa forma, os gestores conseguem analisar os dados com calma e clareza diretamente em seus emails, sem necessidade de sistemas externos ou treinamentos complexos.
+                </div>
+                
+                <button class="view-images-btn" onclick="openImageModal(['dash1.png', 'dash2.png'])">📷 Ver Dashboards</button>
+                
+                <div class="project-results">
+                    <h4>🎯 Resultados Alcançados:</h4>
+                    <p>• Visualização clara e objetiva dos dados<br>
+                    • Eliminação da poluição visual e excesso de filtros<br>
+                    • Análise facilitada direto no email dos gestores<br>
+                    • Redução de 80% no tempo de análise e tomada de decisão</p>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-title">🛒 Sistema PDV Mini ERP</div>
+                <div class="project-tech">HTML5</div>
+                <div class="project-tech">CSS3</div>
+                <div class="project-tech">JavaScript</div>
+                <div class="project-tech">PHP</div>
+                
+                <div class="project-description">
+                    Desenvolvi um sistema completo de PDV e Mini ERP com gestão de vendas, controle de estoque, painel administrativo e relatórios gerenciais. O sistema possui design responsivo, sincronização em tempo real e integração com APIs de pagamento e nota fiscal eletrônica.
+                </div>
+                
+                <button class="site-btn" onclick="openSite('https://www.lumepdv.com/', 'Lume - Sistema Gestão Vendas Estoque PDV')">🌐 Ver Sistema Online</button>
+                
+                <div class="project-results">
+                    <h4>🎯 Resultados Alcançados:</h4>
+                    <p>• Sistema completo de PDV e gestão<br>
+                    • Completo controle de estoque<br>
+                    • CRM para pós-vendas com clientes<br>
+                    • Todo tipo de dashboard que um microempresário precisa ter</p>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-title">📊 Dashboard Power BI - Análise Financeira</div>
+                <div class="project-tech">Power BI</div>
+                <div class="project-tech">DAX</div>
+                <div class="project-tech">SQL</div>
+                <div class="project-tech">Excel</div>
+                
+                <div class="project-description">
+                    Desenvolvi projetos dinâmicos onde o usuário pode manipular e escolher filtros e indicadores desejados. No exemplo, criamos um dashboard contábil que permite comparar qualquer conta da contabilidade, calculando indicadores, variantes e trazendo insights de melhorias ou alertas sobre decréscimos de saldos. O sistema oferece total autonomia para análises personalizadas em tempo real.
+                </div>
+                
+                <button class="view-images-btn" onclick="openImageModal(['pow1.png'])">📷 Ver Imagem do Projeto</button>
+                
+                <div class="project-results">
+                    <h4>🎯 Resultados Alcançados:</h4>
+                    <p>• Integração de 8 fontes de dados diferentes<br>
+                    • 25 indicadores financeiros em tempo real<br>
+                    • Utilizado por 100% da diretoria<br>
+                    • Redução de 90% no tempo de relatórios mensais</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal para visualização de imagens -->
+    <div id="imageModal" class="image-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <div class="image-counter" id="imageCounter">1 / 1</div>
+            <button class="modal-nav modal-prev" onclick="changeImage(-1)">◄</button>
+            <div class="image-wrapper" id="imageWrapper">
+                <img id="modalImage" src="" alt="Imagem do projeto">
+            </div>
+            <button class="modal-nav modal-next" onclick="changeImage(1)">►</button>
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="resetZoom()" title="Resetar Zoom">⟲</button>
+                <button class="zoom-btn" onclick="zoomOut()" title="Diminuir">−</button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button class="zoom-btn" onclick="zoomIn()" title="Aumentar">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para visualização de site em iframe -->
+    <div id="iframeModal" class="iframe-modal">
+        <div class="iframe-container">
+            <div class="iframe-header">
+                <h3 id="iframeTitle">Site</h3>
+                <button class="iframe-close" onclick="closeIframeModal()">&times;</button>
+            </div>
+            <iframe id="iframeContent" class="iframe-content" src=""></iframe>
+        </div>
+    </div>
+
+    <button class="back-btn" onclick="window.close()">
+        ← VOLTAR AO CURRÍCULO
+    </button>
+
+    <script>
+        let currentImages = [];
+        let currentImageIndex = 0;
+        let zoomLevel = 1;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        let baseWidth = 0;
+        let baseHeight = 0;
+
+        function openImageModal(images) {
+            currentImages = images;
+            currentImageIndex = 0;
+            zoomLevel = 1;
+            showImage();
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+            resetZoom();
+        }
+
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) {
+                currentImageIndex = currentImages.length - 1;
+            } else if (currentImageIndex >= currentImages.length) {
+                currentImageIndex = 0;
+            }
+            resetZoom();
+            showImage();
+        }
+
+        function showImage() {
+            const img = document.getElementById('modalImage');
+            const counter = document.getElementById('imageCounter');
+            const wrapper = document.getElementById('imageWrapper');
+            
+            // Limpa a imagem anterior
+            img.src = '';
+            
+            // Carrega nova imagem
+            img.onload = function() {
+                console.log('Imagem carregada:', currentImages[currentImageIndex]);
+                // Aguarda um frame para garantir que a imagem foi renderizada
+                setTimeout(function() {
+                    // Salva o tamanho base (100%) que é o tamanho renderizado inicial
+                    baseWidth = img.offsetWidth;
+                    baseHeight = img.offsetHeight;
+                    console.log('Tamanho base:', baseWidth, 'x', baseHeight);
+                }, 50);
+            };
+            
+            img.onerror = function() {
+                console.error('Erro ao carregar PNG:', currentImages[currentImageIndex]);
+                // Tenta carregar JPEG se PNG falhar
+                const currentSrc = currentImages[currentImageIndex];
+                if (currentSrc.toLowerCase().endsWith('.png')) {
+                    const jpegSrc = currentSrc.replace(/\.png$/i, '.jpeg');
+                    console.log('Tentando carregar JPEG:', jpegSrc);
+                    
+                    // Tenta JPEG
+                    const jpegImg = new Image();
+                    jpegImg.onload = function() {
+                        console.log('JPEG carregado com sucesso:', jpegSrc);
+                        img.src = jpegSrc;
+                    };
+                    jpegImg.onerror = function() {
+                        // Tenta JPG também
+                        const jpgSrc = currentSrc.replace(/\.png$/i, '.jpg');
+                        console.log('Tentando carregar JPG:', jpgSrc);
+                        const jpgImg = new Image();
+                        jpgImg.onload = function() {
+                            console.log('JPG carregado com sucesso:', jpgSrc);
+                            img.src = jpgSrc;
+                        };
+                        jpgImg.onerror = function() {
+                            console.error('Nenhum formato encontrado para:', currentSrc);
+                            img.alt = 'Imagem não encontrada: ' + currentSrc;
+                        };
+                        jpgImg.src = jpgSrc;
+                    };
+                    jpegImg.src = jpegSrc;
+                } else {
+                    img.alt = 'Erro ao carregar imagem: ' + currentImages[currentImageIndex];
+                }
+            };
+            
+            img.src = currentImages[currentImageIndex];
+            
+            // Atualiza contador
+            counter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
+            
+            // Reseta scroll
+            wrapper.scrollLeft = 0;
+            wrapper.scrollTop = 0;
+            
+            // Mostra/oculta botões de navegação se houver apenas uma imagem
+            const prevBtn = document.querySelector('.modal-prev');
+            const nextBtn = document.querySelector('.modal-next');
+            if (currentImages.length <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                counter.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+                nextBtn.style.display = 'block';
+                counter.style.display = 'block';
+            }
+        }
+
+        function zoomIn() {
+            if (zoomLevel < 1.1) {
+                zoomLevel += 0.01; // Incremento de 1% até 110%
+            } else if (zoomLevel < 1.5) {
+                zoomLevel += 0.05; // Incremento de 5% até 150%
+            } else if (zoomLevel < 2) {
+                zoomLevel += 0.1; // Incremento de 10% até 200%
+            } else if (zoomLevel < 3) {
+                zoomLevel += 0.25; // Incremento de 25% até 300%
+            } else {
+                zoomLevel = Math.min(zoomLevel + 0.5, 5); // Incremento de 50% acima de 300%
+            }
+            zoomLevel = Math.round(zoomLevel * 100) / 100; // Arredonda para 2 casas decimais
+            applyZoom();
+        }
+
+        function zoomOut() {
+            if (zoomLevel <= 1.1) {
+                zoomLevel = Math.max(zoomLevel - 0.01, 1); // Decremento de 1% até 110%
+            } else if (zoomLevel <= 1.5) {
+                zoomLevel = Math.max(zoomLevel - 0.05, 1); // Decremento de 5% até 150%
+            } else if (zoomLevel <= 2) {
+                zoomLevel = Math.max(zoomLevel - 0.1, 1); // Decremento de 10% até 200%
+            } else if (zoomLevel <= 3) {
+                zoomLevel = Math.max(zoomLevel - 0.25, 1); // Decremento de 25% até 300%
+            } else {
+                zoomLevel = Math.max(zoomLevel - 0.5, 1); // Decremento de 50% acima de 300%
+            }
+            zoomLevel = Math.round(zoomLevel * 100) / 100; // Arredonda para 2 casas decimais
+            applyZoom();
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const img = document.getElementById('modalImage');
+            const wrapper = document.getElementById('imageWrapper');
+            const zoomDisplay = document.getElementById('zoomLevel');
+            
+            // Atualiza display do zoom
+            zoomDisplay.textContent = Math.round(zoomLevel * 100) + '%';
+            
+            if (zoomLevel > 1) {
+                img.classList.add('zoomed');
+                // Usa o tamanho base (renderizado) como referência, não o tamanho natural
+                img.style.width = (baseWidth * zoomLevel) + 'px';
+                img.style.height = (baseHeight * zoomLevel) + 'px';
+                wrapper.style.cursor = 'grab';
+            } else {
+                img.classList.remove('zoomed');
+                img.style.width = '';
+                img.style.height = '';
+                img.style.cursor = 'zoom-in';
+                wrapper.style.cursor = 'default';
+            }
+        }
+
+        // Drag para mover a imagem quando está com zoom
+        const wrapper = document.getElementById('imageWrapper');
+        
+        wrapper.addEventListener('mousedown', function(e) {
+            if (zoomLevel > 1) {
+                isDragging = true;
+                wrapper.style.cursor = 'grabbing';
+                startX = e.pageX - wrapper.offsetLeft;
+                startY = e.pageY - wrapper.offsetTop;
+                scrollLeft = wrapper.scrollLeft;
+                scrollTop = wrapper.scrollTop;
+            }
+        });
+
+        wrapper.addEventListener('mouseleave', function() {
+            isDragging = false;
+            if (zoomLevel > 1) {
+                wrapper.style.cursor = 'grab';
+            }
+        });
+
+        wrapper.addEventListener('mouseup', function() {
+            isDragging = false;
+            if (zoomLevel > 1) {
+                wrapper.style.cursor = 'grab';
+            }
+        });
+
+        wrapper.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - wrapper.offsetLeft;
+            const y = e.pageY - wrapper.offsetTop;
+            const walkX = (x - startX) * 2;
+            const walkY = (y - startY) * 2;
+            wrapper.scrollLeft = scrollLeft - walkX;
+            wrapper.scrollTop = scrollTop - walkY;
+        });
+
+        // Zoom com clique na imagem
+        document.getElementById('modalImage').addEventListener('click', function(e) {
+            if (!isDragging) {
+                if (zoomLevel === 1) {
+                    zoomLevel = 1.05; // Apenas 105% no clique
+                } else {
+                    resetZoom();
+                }
+                applyZoom();
+            }
+        });
+
+        // Zoom com scroll do mouse
+        wrapper.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        }, { passive: false });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('iframeModal').classList.contains('active')) {
+                    closeIframeModal();
+                } else if (document.getElementById('imageModal').classList.contains('active')) {
+                    closeImageModal();
+                } else {
+                    window.close();
+                }
+            }
+            // Navegar com setas (apenas no modal de imagens)
+            if (document.getElementById('imageModal').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') changeImage(-1);
+                if (e.key === 'ArrowRight') changeImage(1);
+            }
+        });
+
+        // Fechar modal clicando fora da imagem
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // Funções para iframe modal
+        function openSite(url, title) {
+            const iframeModal = document.getElementById('iframeModal');
+            const iframe = document.getElementById('iframeContent');
+            const iframeTitle = document.getElementById('iframeTitle');
+            
+            iframe.src = url;
+            iframeTitle.textContent = title;
+            iframeModal.classList.add('active');
+        }
+
+        function closeIframeModal() {
+            const iframeModal = document.getElementById('iframeModal');
+            const iframe = document.getElementById('iframeContent');
+            
+            iframeModal.classList.remove('active');
+            iframe.src = ''; // Limpa o iframe ao fechar
+        }
+
+        // Fechar iframe modal clicando fora
+        document.getElementById('iframeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeIframeModal();
+            }
+        });
+
+        // Animação de entrada da página
+        window.addEventListener('load', function() {
+            document.querySelector('.portfolio-container').style.opacity = '0';
+            document.querySelector('.portfolio-container').style.transform = 'scale(0.9)';
+            
+            setTimeout(function() {
+                document.querySelector('.portfolio-container').style.transition = 'all 0.5s ease';
+                document.querySelector('.portfolio-container').style.opacity = '1';
+                document.querySelector('.portfolio-container').style.transform = 'scale(1)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
